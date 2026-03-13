@@ -1,0 +1,55 @@
+# https://taskfile.dev
+version: '3'
+tasks:
+  default:
+    desc: list all tasks
+    silent: true
+    cmds:
+      - task --list-all
+  fmt:
+    desc: format everything
+    vars:
+      mode: '{{ .mode | default "format" }}'
+    requires:
+      vars:
+        - name: mode
+          enum: [format, check]
+    cmds:
+      # format
+      - cmd: npm run fmt-fix
+        if: '{{ eq .mode "format" }}'
+      - cmd: yamlfmt .
+        if: '{{ eq .mode "format" }}'
+      - cmd: find . -type f -name "*.nix" | xargs -I % nixfmt --strict --verify %
+        if: '{{ eq .mode "format" }}'
+      # check
+      - cmd: npm run fmt
+        if: '{{ eq .mode "check" }}'
+      - cmd: yamlfmt -lint .
+        if: '{{ eq .mode "check" }}'
+      - cmd: find . -type f -name "*.nix" | xargs -I % nixfmt --check --strict --verify %
+        if: '{{ eq .mode "check" }}'
+  lint:
+    desc: lint everything
+    vars:
+      mode: '{{ .mode | default "fix" }}'
+    requires:
+      vars:
+        - name: mode
+          enum: [fix, check]
+    cmds:
+      # fix
+      - cmd: npm run lint-fix
+        if: '{{ eq .mode "fix" }}'
+      # check
+      - cmd: npm run lint
+        if: '{{ eq .mode "check" }}'
+  pre-commit:
+    desc: mandatory pre-commit checks
+    cmds:
+      - task: fmt
+        vars:
+          mode: check
+      - task: lint
+        vars:
+          mode: check
