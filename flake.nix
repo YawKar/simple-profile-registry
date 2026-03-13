@@ -1,5 +1,5 @@
 {
-  description = "nixified-typescript-template";
+  description = "simple-profile-registry";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -35,6 +35,7 @@
 
             shellHook = ''
               pre-commit uninstall && pre-commit install
+              alias nest='npx @nestjs/cli'
               echo "🚀 Modern TypeScript environment"
               task
             '';

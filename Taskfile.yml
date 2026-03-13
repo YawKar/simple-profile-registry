@@ -16,14 +16,14 @@ tasks:
           enum: [format, check]
     cmds:
       # format
-      - cmd: npm run fmt-fix
+      - cmd: npm run format
         if: '{{ eq .mode "format" }}'
       - cmd: yamlfmt .
         if: '{{ eq .mode "format" }}'
       - cmd: find . -type f -name "*.nix" | xargs -I % nixfmt --strict --verify %
         if: '{{ eq .mode "format" }}'
       # check
-      - cmd: npm run fmt
+      - cmd: npm run format -- --check
         if: '{{ eq .mode "check" }}'
       - cmd: yamlfmt -lint .
         if: '{{ eq .mode "check" }}'
@@ -39,7 +39,7 @@ tasks:
           enum: [fix, check]
     cmds:
       # fix
-      - cmd: npm run lint-fix
+      - cmd: npm run lint -- --fix
         if: '{{ eq .mode "fix" }}'
       # check
       - cmd: npm run lint
