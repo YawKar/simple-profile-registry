@@ -1,5 +1,5 @@
 {
-  description = "nixified-typescript-template";
+  description = "simple-profile-registry";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
