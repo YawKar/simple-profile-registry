@@ -24,9 +24,44 @@ describe('AppController (e2e)', () => {
   });
 
   it('/cats (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/cats')
-      .expect(200)
-      .expect('This method returns all cats');
+    return request(app.getHttpServer()).get('/cats').expect(200).expect('[]');
   });
+
+  const tcases: [string, number, any][] = [
+    ['/exceptions/predefined', 403, { message: 'Forbidden', statusCode: 403 }],
+    [
+      '/exceptions/predefined-with-message',
+      403,
+      { message: 'custom message', error: 'Forbidden', statusCode: 403 },
+    ],
+    [
+      '/exceptions/predefined-with-object',
+      403,
+      { field1: 'custom field1', field2: 'custom field2' },
+    ],
+    [
+      '/exceptions/plain-http-exception-forbidden',
+      403,
+      { statusCode: 403, message: 'forbidden' },
+    ],
+    [
+      '/exceptions/plain-http-exception-with-custom-object',
+      409,
+      { field1: 'custom field1', field2: 'custom field2' },
+    ],
+    [
+      '/exceptions/my-custom-exception',
+      409,
+      { message: 'This is the custom message' },
+    ],
+  ];
+
+  for (const tcase of tcases) {
+    it(tcase[0], () => {
+      return request(app.getHttpServer())
+        .get(tcase[0])
+        .expect(tcase[1])
+        .expect(tcase[2]);
+    });
+  }
 });
