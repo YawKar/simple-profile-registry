@@ -13,6 +13,7 @@ import {
   ParseIntPipe,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { type IncomingHttpHeaders } from 'node:http';
@@ -20,6 +21,7 @@ import { type ParsedQs } from 'qs';
 import { CatsService } from './cats/cats.service';
 import { Cat } from './cats/interfaces/cat.interface';
 import { IsInt, IsString } from 'class-validator';
+import { MyGuardGuard, Roles } from './my-guard/my-guard.guard';
 
 @Controller()
 export class AppController {
@@ -67,11 +69,13 @@ export class PipesController {
   }
 }
 
+@UseGuards(MyGuardGuard)
 @Controller('me')
 export class MeController {
   @Get()
   @HttpCode(201)
   @Header('Cache-Control', 'none')
+  @Roles(['Admin', 'Friend'])
   getMeInfo(
     @Ip() ip: string,
     @Param() params: string[],
