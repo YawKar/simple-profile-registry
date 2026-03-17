@@ -4,7 +4,12 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { AppController, CatsController, MeController } from './app.controller';
+import {
+  AppController,
+  CatsController,
+  MeController,
+  PipesController,
+} from './app.controller';
 import { AppService } from './app.service';
 import { CatsService } from './cats/cats.service';
 import { LoggerMiddleware } from './middleware/logger.middleware';
@@ -17,6 +22,7 @@ import { ExceptionsController } from './exceptions/exceptions.controller';
     CatsController,
     MeController,
     ExceptionsController,
+    PipesController,
   ],
   providers: [AppService, CatsService],
 })

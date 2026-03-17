@@ -10,12 +10,16 @@ import {
   Header,
   Post,
   BadRequestException,
+  ParseIntPipe,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { type IncomingHttpHeaders } from 'node:http';
 import { type ParsedQs } from 'qs';
 import { CatsService } from './cats/cats.service';
 import { Cat } from './cats/interfaces/cat.interface';
+import { IsInt, IsString } from 'class-validator';
 
 @Controller()
 export class AppController {
@@ -28,8 +32,11 @@ export class AppController {
 }
 
 class CreateCatDto {
+  @IsString()
   name: string;
+  @IsInt()
   age: number;
+  @IsString()
   breed: string;
 }
 
@@ -43,11 +50,20 @@ export class CatsController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createCat(@Body() createCatDto: CreateCatDto) {
     if (createCatDto === undefined) {
       throw new BadRequestException();
     }
     this.catsService.create(createCatDto);
+  }
+}
+
+@Controller('pipes')
+export class PipesController {
+  @Get(':id')
+  getPipe(@Param('id', ParseIntPipe) id: number) {
+    return `The number is correct: ${id}!`;
   }
 }
 
