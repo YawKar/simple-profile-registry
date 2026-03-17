@@ -4,8 +4,19 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+const FIXED_DATE = new Date('2026-03-16T12:00:00Z');
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
+
+  beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(FIXED_DATE);
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -53,6 +64,15 @@ describe('AppController (e2e)', () => {
       '/exceptions/my-custom-exception',
       409,
       { message: 'This is the custom message' },
+    ],
+    [
+      '/exceptions/my-custom-exception-with-filter',
+      409,
+      {
+        статие: 409,
+        годовния: FIXED_DATE.toISOString(),
+        path: '/exceptions/my-custom-exception-with-filter',
+      },
     ],
   ];
 

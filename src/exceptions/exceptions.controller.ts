@@ -4,7 +4,9 @@ import {
   ForbiddenException,
   HttpException,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
+import { HttpExceptionFilter } from './http-exceptions.filter';
 
 class MyCustomException extends HttpException {
   constructor(message: string) {
@@ -50,6 +52,12 @@ export class ExceptionsController {
 
   @All('my-custom-exception')
   myCustomException() {
+    throw new MyCustomException('This is the custom message');
+  }
+
+  @UseFilters(HttpExceptionFilter)
+  @All('my-custom-exception-with-filter')
+  myCustomExceptionWithFilter() {
     throw new MyCustomException('This is the custom message');
   }
 }
