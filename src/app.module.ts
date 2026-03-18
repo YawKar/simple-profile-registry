@@ -9,6 +9,7 @@ import {
   CatsController,
   MeController,
   PipesController,
+  TimeoutController,
 } from './app.controller';
 import { AppService } from './app.service';
 import { CatsService } from './cats/cats.service';
@@ -23,6 +24,7 @@ import { ExceptionsController } from './exceptions/exceptions.controller';
     MeController,
     ExceptionsController,
     PipesController,
+    TimeoutController,
   ],
   providers: [AppService, CatsService],
 })

@@ -14,6 +14,8 @@ import {
   UsePipes,
   ValidationPipe,
   UseGuards,
+  UseInterceptors,
+  All,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { type IncomingHttpHeaders } from 'node:http';
@@ -22,6 +24,8 @@ import { CatsService } from './cats/cats.service';
 import { Cat } from './cats/interfaces/cat.interface';
 import { IsInt, IsString } from 'class-validator';
 import { MyGuardGuard, Roles } from './my-guard/my-guard.guard';
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { TimeoutInterceptor } from './interceptors/timeout.interceptor';
 
 @Controller()
 export class AppController {
@@ -70,6 +74,7 @@ export class PipesController {
 }
 
 @UseGuards(MyGuardGuard)
+@UseInterceptors(LoggingInterceptor)
 @Controller('me')
 export class MeController {
   @Get()
@@ -90,5 +95,14 @@ export class MeController {
       headers,
       body,
     };
+  }
+}
+
+@Controller('timeout')
+export class TimeoutController {
+  @UseInterceptors(TimeoutInterceptor)
+  @All()
+  async shouldTimeout(): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, 10000));
   }
 }
