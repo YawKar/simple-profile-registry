@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable, tap } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -16,6 +16,6 @@ export class LoggingInterceptor implements NestInterceptor {
     const now = Date.now();
     return next
       .handle()
-      .pipe(tap(() => console.log(`After: took ${Date.now() - now}`)));
+      .pipe(finalize(() => console.log(`After: took ${Date.now() - now}`)));
   }
 }

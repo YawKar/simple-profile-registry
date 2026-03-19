@@ -15,9 +15,20 @@ import { AppService } from './app.service';
 import { CatsService } from './cats/cats.service';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { ExceptionsController } from './exceptions/exceptions.controller';
+import { ConfigModule } from '@nestjs/config';
+import Joi from 'joi';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string()
+          .valid('development', 'prestable', 'stable')
+          .required(),
+        PORT: Joi.number().port().required(),
+      }),
+    }),
+  ],
   controllers: [
     AppController,
     CatsController,

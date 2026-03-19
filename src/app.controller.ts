@@ -100,7 +100,7 @@ export class MeController {
 
 @Controller('timeout')
 export class TimeoutController {
-  @UseInterceptors(TimeoutInterceptor)
+  @UseInterceptors(TimeoutInterceptor, LoggingInterceptor)
   @All()
   async shouldTimeout(): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 10000));
