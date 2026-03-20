@@ -16,16 +16,19 @@ import {
   UseGuards,
   UseInterceptors,
   All,
+  NotFoundException,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { type IncomingHttpHeaders } from 'node:http';
 import { type ParsedQs } from 'qs';
 import { CatsService } from './cats/cats.service';
 import { Cat } from './cats/interfaces/cat.interface';
-import { IsInt, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsString } from 'class-validator';
 import { MyGuardGuard, Roles } from './my-guard/my-guard.guard';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './interceptors/timeout.interceptor';
+import { UsersService } from './users/users.service';
+import { User } from './entities/user.entity';
 
 @Controller()
 export class AppController {
@@ -104,5 +107,41 @@ export class TimeoutController {
   @All()
   async shouldTimeout(): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, 10000));
+  }
+}
+
+class CreateUserDto {
+  @IsString()
+  firstName: string;
+  @IsString()
+  lastName: string;
+  @IsBoolean()
+  isActive: boolean;
+}
+
+@UseInterceptors(TimeoutInterceptor, LoggingInterceptor)
+@Controller('users')
+export class UsersController {
+  constructor(private usersService: UsersService) {}
+
+  @Get(':id')
+  async getUser(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.getUser(id);
+    if (user === null) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
+  @UsePipes(ValidationPipe)
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUser(
+      new User({
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
+        isActive: createUserDto.isActive,
+      }),
+    );
   }
 }

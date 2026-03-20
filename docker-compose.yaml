@@ -1,0 +1,52 @@
+name: Simple Profile Registry Local Environment
+services:
+  postgres:
+    container_name: postgres_18_alpine323
+    image: postgres:18-alpine3.23
+    restart: unless-stopped
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d main"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    cpu_quota: 1_000_000
+    mem_limit: 2g
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    secrets:
+      - source: postgres_credentials
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_credentials
+      POSTGRES_USER: root
+      POSTGRES_DB: main
+  server:
+    container_name: server_nestjs_nix
+    build:
+      context: .
+      network: host
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080/tcp
+    secrets:
+      - source: server_config
+    environment:
+      ENV_FILE: /run/secrets/server_config
+    restart: always
+    cpu_quota: 1_000_000
+    mem_limit: 2g
+    memswap_limit: 0
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: false
+        required: true
+secrets:
+  postgres_credentials:
+    file: ./secrets/postgres_password
+  server_config:
+    file: ./secrets/.env.local
+volumes:
+  pg_data:
