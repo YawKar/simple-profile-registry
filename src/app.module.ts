@@ -52,6 +52,7 @@ import { UsersService } from './users/users.service';
         synchronize: true,
       }),
     }),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [
     AppController,
