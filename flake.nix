@@ -25,8 +25,8 @@
               nodejs_25
 
               # Automation
-              go-task
               pre-commit
+              go-task
 
               # Formatters & Linters
               yamlfmt

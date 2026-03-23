@@ -1,0 +1,21 @@
+---
+server:
+  port: 3000
+
+auth:
+  jwt:
+    secret: some_kind_of_secret_for_tokens
+    accessTokenExpirationDuration: 60m
+    refreshTokenExpirationDuration: 1w
+
+hash:
+  memoryCost: 4096
+  timeCost: 3
+  parallelism: 1
+
+database:
+  host: $TEST_DB_HOST
+  port: $TEST_DB_PORT
+  dbName: main
+  username: root
+  password: dummy_password_for_local_development
