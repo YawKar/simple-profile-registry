@@ -2,13 +2,13 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Param,
   SerializeOptions,
 } from '@nestjs/common';
 import {
   USER_ENTITY_PAGINATION_CONFIG,
   UsersService,
 } from '../users/users.service';
-import { Login } from 'src/auth/decorators/login.decorator';
 import { GetProfileResponseDto } from './dtos/get-profile-response.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { UserByLoginParam } from '../users/decorators/user-by-login-param.decorator';
@@ -39,17 +39,17 @@ export class ProfilesController {
   }
 
   @Get('me')
-  async getMyProfile(@Login() login: string) {
-    const user = await this.usersService.findOneByLogin(login);
-    if (user === null) {
-      throw new NotFoundException();
-    }
+  getMyProfile(@UserByLoginParam() user: UserEntity) {
     return new GetProfileResponseDto(user);
   }
 
   @ApiParam({ name: 'login', type: 'string' })
   @Get(':login')
-  getProfileById(@UserByLoginParam() user: UserEntity) {
+  async getProfileById(@Param('login') login: string) {
+    const user = await this.usersService.findOneByLogin(login);
+    if (user === null) {
+      throw new NotFoundException();
+    }
     return new GetProfileResponseDto(user);
   }
 }

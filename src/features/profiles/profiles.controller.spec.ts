@@ -96,15 +96,22 @@ describe('ProfilesController', () => {
     };
     await usersService.createNewUser(user);
 
+    const anotherUser = {
+      ...user,
+      login: 'another.user',
+      email: 'another.user@test.com',
+    };
+    await usersService.createNewUser(anotherUser);
+
     const { access_token } = await authService.login(user.login);
 
     const response = (
       await request(app.getHttpServer())
-        .get(`/profiles/${user.login}`)
+        .get(`/profiles/${anotherUser.login}`)
         .auth(access_token, { type: 'bearer' })
         .expect(200)
     ).body as GetProfileResponseDto;
-    const { password, ...withoutPassword } = user;
+    const { password, ...withoutPassword } = anotherUser;
     expect(response).toEqual(withoutPassword);
   });
 });
