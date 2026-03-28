@@ -6,8 +6,14 @@ export default function setupSwagger(app: INestApplication) {
     .setTitle('Simple Profile Registry')
     .setDescription('The stage 1 api')
     .setVersion('1.0')
-    .addBearerAuth()
-    .addBearerAuth({ type: 'http', name: 'jwt-refresh' })
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'refresh-token',
+    )
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);

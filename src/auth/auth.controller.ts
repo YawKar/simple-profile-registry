@@ -36,7 +36,7 @@ export class AuthController {
     return new SignInResponseDto(tokens);
   }
 
-  @ApiBearerAuth('jwt-refresh')
+  @ApiBearerAuth('refresh-token')
   @UseGuards(JwtRefreshAuthGuard)
   @NoJwt()
   @HttpCode(HttpStatus.OK)

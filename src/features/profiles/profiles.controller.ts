@@ -20,7 +20,7 @@ import {
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 
-@ApiBearerAuth()
+@ApiBearerAuth('access-token')
 @Controller('profiles')
 export class ProfilesController {
   constructor(private readonly usersService: UsersService) {}
@@ -39,7 +39,7 @@ export class ProfilesController {
   }
 
   @Get('me')
-  async getMyProfile(@Login login: string) {
+  async getMyProfile(@Login() login: string) {
     const user = await this.usersService.findOneByLogin(login);
     if (user === null) {
       throw new NotFoundException();

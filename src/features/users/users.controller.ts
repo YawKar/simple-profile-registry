@@ -26,14 +26,14 @@ export class UsersController {
     return new CreateUserResponseDto(user);
   }
 
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete()
   async deleteUser(@Login() login: string) {
     await this.usersService.softDeleteUser(login);
   }
 
-  @ApiBearerAuth()
+  @ApiBearerAuth('access-token')
   @Patch()
   async patchUser(@Login() login: string, @Body() patchUserDto: PatchUserDto) {
     await this.usersService.patchUser(login, patchUserDto.patches);
