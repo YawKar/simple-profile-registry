@@ -1,0 +1,28 @@
+---
+name: Run CI checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: "write"
+      contents: "read"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: DeterminateSystems/flake-checker-action@main
+      - name: Install npm dependencies
+        run: nix develop -c npm ci
+      - name: Pre-commit checks
+        run: nix develop -c task pre-commit
+      - name: Run tests
+        run: nix develop -c npm test
