@@ -18,7 +18,6 @@ describe('ProfilesController', () => {
 
   beforeAll(async () => {
     ({ app, pgContainer } = await setupControllerEnv(process.env));
-    await app.init();
     usersService = app.get<UsersService>(UsersService);
     authService = app.get<AuthService>(AuthService);
   }, ms('30s'));

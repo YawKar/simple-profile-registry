@@ -4,9 +4,12 @@ server:
 
 auth:
   jwt:
-    secret: some_kind_of_secret_for_tokens
-    accessTokenExpirationDuration: 60m
-    refreshTokenExpirationDuration: 1w
+    access:
+      secret: some_kind_of_secret_for_tokens
+      expirationDuration: 60m
+    refresh:
+      secret: refresh_secret
+      expirationDuration: 1w
 
 hash:
   memoryCost: 4096

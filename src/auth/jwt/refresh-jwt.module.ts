@@ -12,11 +12,10 @@ export const REFRESH_JWT_SERVICE: symbol = Symbol('REFRESH_JWT_SERVICE');
       inject: [RootConfigService],
       useFactory: (rootConfigService: RootConfigService) => {
         return {
-          secret: rootConfigService.auth.jwt.secret,
+          secret: rootConfigService.auth.jwt.refresh.secret,
           signOptions: {
             algorithm: 'HS256',
-            expiresIn:
-              rootConfigService.auth.jwt.refreshTokenExpirationDuration,
+            expiresIn: rootConfigService.auth.jwt.refresh.expirationDuration,
             allowInsecureKeySizes: false,
           },
         };

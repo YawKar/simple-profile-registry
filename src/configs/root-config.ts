@@ -40,13 +40,18 @@ export class DatabaseConfig {
   password!: string;
 }
 
-export class JwtConfig {
+export class TokenConfig {
   @IsString()
   secret!: string;
   @IsDuration()
-  accessTokenExpirationDuration!: StringValue;
-  @IsDuration()
-  refreshTokenExpirationDuration!: StringValue;
+  expirationDuration!: StringValue;
+}
+
+export class JwtConfig {
+  @ShouldBeNestedValidated(() => TokenConfig)
+  access!: TokenConfig;
+  @ShouldBeNestedValidated(() => TokenConfig)
+  refresh!: TokenConfig;
 }
 
 export class AuthConfig {

@@ -12,7 +12,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   constructor(rootConfigService: RootConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: rootConfigService.auth.jwt.secret,
+      secretOrKey: rootConfigService.auth.jwt.refresh.secret,
     });
   }
 

@@ -27,7 +27,6 @@ services:
     container_name: server_nestjs_nix
     build:
       context: ..
-      network: host
       dockerfile: Dockerfile
     ports:
       - 3000:3000/tcp

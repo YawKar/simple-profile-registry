@@ -3,15 +3,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigsModule } from './configs/configs.module';
 import { FeaturesModule } from './features/features.module';
 import { ProvidersModule } from './providers/providers.module';
-import { CommonModule } from './common/common.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    ConfigsModule,
-    FeaturesModule,
-    ProvidersModule,
-    CommonModule,
-  ],
+  imports: [AuthModule, ConfigsModule, FeaturesModule, ProvidersModule],
 })
 export class AppModule {}

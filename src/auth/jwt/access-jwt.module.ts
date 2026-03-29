@@ -12,10 +12,10 @@ export const ACCESS_JWT_SERVICE: symbol = Symbol('ACCESS_JWT_SERVICE');
       inject: [RootConfigService],
       useFactory: (rootConfigService: RootConfigService) => {
         return {
-          secret: rootConfigService.auth.jwt.secret,
+          secret: rootConfigService.auth.jwt.access.secret,
           signOptions: {
             algorithm: 'HS256',
-            expiresIn: rootConfigService.auth.jwt.accessTokenExpirationDuration,
+            expiresIn: rootConfigService.auth.jwt.access.expirationDuration,
             allowInsecureKeySizes: false,
           },
         };
