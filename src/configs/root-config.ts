@@ -3,11 +3,31 @@ import { type StringValue } from 'ms';
 import { IsDuration } from 'src/common/decorators/is-duration.decorator';
 import { ShouldBeNestedValidated } from 'src/common/decorators/should-be-nested-validated.decorator';
 
+export class SingleThrottlerConfig {
+  @IsDuration()
+  ttl!: StringValue;
+  @Min(0)
+  @Max(1000)
+  @IsInt()
+  limit!: number;
+}
+
+export class ThrottleConfig {
+  @ShouldBeNestedValidated(() => SingleThrottlerConfig)
+  auth!: SingleThrottlerConfig;
+  @ShouldBeNestedValidated(() => SingleThrottlerConfig)
+  users!: SingleThrottlerConfig;
+  @ShouldBeNestedValidated(() => SingleThrottlerConfig)
+  profiles!: SingleThrottlerConfig;
+}
+
 export class ServerConfig {
   @Min(0)
   @Max(65535)
   @IsInt()
   port!: number;
+  @ShouldBeNestedValidated(() => ThrottleConfig)
+  throttle!: ThrottleConfig;
 }
 
 export class HashConfig {

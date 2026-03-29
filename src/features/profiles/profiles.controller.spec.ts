@@ -10,6 +10,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { GetProfileResponseDto } from './dtos/get-profile-response.dto';
 import { CreateUserRequestDto } from '../users/dtos/create-user-request.dto';
 import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
+import { clearThrottlingStorage } from 'test/utils/clear-throttling-storage';
 
 describe('ProfilesController', () => {
   let app: INestApplication<App>;
@@ -28,6 +29,7 @@ describe('ProfilesController', () => {
   }, ms('30s'));
 
   beforeEach(async () => {
+    clearThrottlingStorage(app);
     await truncateAllDataSources(app);
   });
 

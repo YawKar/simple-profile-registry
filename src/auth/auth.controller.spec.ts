@@ -8,6 +8,7 @@ import setupControllerEnv from 'test/utils/setup-controller-env';
 import { SignInResponseDto } from './dtos/sign-in-response.dto';
 import { UsersService } from 'src/features/users/users.service';
 import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
+import { clearThrottlingStorage } from 'test/utils/clear-throttling-storage';
 
 describe('AuthController', () => {
   let app: INestApplication<App>;
@@ -26,6 +27,7 @@ describe('AuthController', () => {
   }, ms('30s'));
 
   beforeEach(async () => {
+    clearThrottlingStorage(app);
     await truncateAllDataSources(app);
   });
 

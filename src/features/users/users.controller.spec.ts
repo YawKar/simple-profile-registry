@@ -8,6 +8,7 @@ import { CreateUserResponseDto } from './dtos/create-user-response.dto';
 import { SignInResponseDto } from 'src/auth/dtos/sign-in-response.dto';
 import setupControllerEnv from 'test/utils/setup-controller-env';
 import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
+import { clearThrottlingStorage } from 'test/utils/clear-throttling-storage';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication<App>;
@@ -24,6 +25,7 @@ describe('UsersController (e2e)', () => {
   }, ms('30s'));
 
   beforeEach(async () => {
+    clearThrottlingStorage(app);
     await truncateAllDataSources(app);
   });
 

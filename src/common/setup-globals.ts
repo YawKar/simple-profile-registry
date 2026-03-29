@@ -7,6 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { updateGlobalConfig } from 'nestjs-paginate';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TypeOrmExceptionFilter } from './type-orm-exception.filter';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 export default function setupGlobals<Server>(app: INestApplication<Server>) {
   updateGlobalConfig({
@@ -29,5 +30,8 @@ export default function setupGlobals<Server>(app: INestApplication<Server>) {
       excludeExtraneousValues: true,
     }),
   );
-  app.useGlobalGuards(app.get<JwtAuthGuard>(JwtAuthGuard));
+  app.useGlobalGuards(
+    app.get<ThrottlerGuard>(ThrottlerGuard),
+    app.get<JwtAuthGuard>(JwtAuthGuard),
+  );
 }

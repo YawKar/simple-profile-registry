@@ -1,6 +1,16 @@
 ---
 server:
   port: 3000
+  throttle:
+    auth:
+      ttl: 60s
+      limit: 10
+    users:
+      ttl: 60s
+      limit: 10
+    profiles:
+      ttl: 1s
+      limit: 1
 
 auth:
   jwt:

@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { REFRESH_JWT_SERVICE } from './jwt/refresh-jwt.module';
 import { RefreshTokenPayload } from './dtos/refresh-token-payload';
 import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
+import { clearThrottlingStorage } from 'test/utils/clear-throttling-storage';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -30,6 +31,7 @@ describe('AuthService', () => {
   }, ms('30s'));
 
   beforeEach(async () => {
+    clearThrottlingStorage(app);
     await truncateAllDataSources(app);
   });
 

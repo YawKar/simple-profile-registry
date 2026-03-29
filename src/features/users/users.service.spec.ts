@@ -5,6 +5,7 @@ import setupControllerEnv from 'test/utils/setup-controller-env';
 import { INestApplication } from '@nestjs/common';
 import { App } from 'supertest/types';
 import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
+import { clearThrottlingStorage } from 'test/utils/clear-throttling-storage';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -21,6 +22,7 @@ describe('UsersService', () => {
   }, ms('30s'));
 
   beforeEach(async () => {
+    clearThrottlingStorage(app);
     await truncateAllDataSources(app);
   });
 
