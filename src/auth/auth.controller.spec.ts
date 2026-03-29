@@ -4,9 +4,10 @@ import { INestApplication } from '@nestjs/common';
 import ms from 'ms';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import setupControllerEnv from 'test/setup-controller-env';
+import setupControllerEnv from 'test/utils/setup-controller-env';
 import { SignInResponseDto } from './dtos/sign-in-response.dto';
 import { UsersService } from 'src/features/users/users.service';
+import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
 
 describe('AuthController', () => {
   let app: INestApplication<App>;
@@ -23,6 +24,10 @@ describe('AuthController', () => {
   afterAll(async () => {
     await pgContainer.stop();
   }, ms('30s'));
+
+  beforeEach(async () => {
+    await truncateAllDataSources(app);
+  });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();

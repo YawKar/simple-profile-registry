@@ -3,8 +3,11 @@ import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import ms from 'ms';
 import { ConfigsModule } from 'src/configs/configs.module';
 import { RootConfigService } from 'src/configs/root-config.service';
+import { CHECK_NODE_DEV_IS_TEST } from './check-node-dev-is-test';
 
 export default async function setupPostgreSqlContainer(env: NodeJS.ProcessEnv) {
+  CHECK_NODE_DEV_IS_TEST();
+
   env.CONFIG_FILE = 'test/config/testing.app.yaml';
   env.TEST_DB_HOST = 'dummy-host-dont-use-it';
   env.TEST_DB_PORT = '5432';

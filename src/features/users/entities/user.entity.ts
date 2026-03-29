@@ -28,8 +28,8 @@ export class UserEntity {
   @Column({ length: 1000 })
   description!: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  refreshToken!: string | null;
+  @Column({ type: 'char', length: 96, nullable: true })
+  hashedRefreshToken!: string | null;
 
   @VersionColumn({ select: false })
   version!: number;
@@ -48,7 +48,7 @@ export class UserEntity {
       | 'createdAt'
       | 'updatedAt'
       | 'deletedAt'
-      | 'refreshToken'
+      | 'hashedRefreshToken'
     >,
   ) {
     Object.assign(this, values);

@@ -10,10 +10,10 @@ import {
 import { CreateUserRequestDto } from './dtos/create-user-request.dto';
 import { UsersService } from './users.service';
 import { CreateUserResponseDto } from './dtos/create-user-response.dto';
-import { Login } from 'src/auth/decorators/login.decorator';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { NoJwt } from 'src/auth/decorators/no-jwt.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { CurrentUserLogin } from 'src/auth/decorators/current-user-login.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -29,13 +29,17 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete()
-  async deleteUser(@Login() login: string) {
+  async deleteUser(@CurrentUserLogin() login: string) {
     await this.usersService.softDeleteUser(login);
+    await this.usersService.invalidateRefreshToken(login);
   }
 
   @ApiBearerAuth('access-token')
   @Patch()
-  async patchUser(@Login() login: string, @Body() patchUserDto: PatchUserDto) {
+  async patchUser(
+    @CurrentUserLogin() login: string,
+    @Body() patchUserDto: PatchUserDto,
+  ) {
     await this.usersService.patchUser(login, patchUserDto.patches);
   }
 }

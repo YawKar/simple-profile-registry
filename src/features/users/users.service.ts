@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserRequestDto } from './dtos/create-user-request.dto';
 import { FindOptionsSelect, IsNull, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
-import { HashService } from 'src/auth/hash/hash.service';
+import { HashService } from 'src/common/hash/hash.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, PaginateConfig, PaginateQuery } from 'nestjs-paginate';
 import { UserPatches } from './dtos/patch-user.dto';
@@ -51,7 +51,7 @@ export class UsersService {
     }
     return await this.usersRepository.findOne({
       where: { login },
-      select: selectFields,
+      select: { login: true, ...selectFields },
     });
   }
 
@@ -70,16 +70,29 @@ export class UsersService {
     await this.usersRepository.update(
       { login, deletedAt: IsNull() },
       {
-        refreshToken: newRefreshToken,
+        hashedRefreshToken: await this.hashService.hash(newRefreshToken),
       },
     );
   }
 
   async doRefreshTokensMatch(login: string, givenRefreshToken: string) {
-    return await this.usersRepository.existsBy({
-      login,
-      refreshToken: givenRefreshToken,
-      deletedAt: IsNull(),
-    });
+    const user = await this.findOneByLogin(login, { hashedRefreshToken: true });
+    if (!user) {
+      return false;
+    }
+    return await this.hashService.compare(
+      givenRefreshToken,
+      user.hashedRefreshToken ?? '',
+    );
+  }
+
+  async invalidateRefreshToken(login: string) {
+    await this.usersRepository.update(
+      { login },
+      {
+        login,
+        hashedRefreshToken: null,
+      },
+    );
   }
 }

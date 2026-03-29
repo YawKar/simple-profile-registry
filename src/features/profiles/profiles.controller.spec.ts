@@ -1,4 +1,4 @@
-import setupControllerEnv from 'test/setup-controller-env';
+import setupControllerEnv from 'test/utils/setup-controller-env';
 import { INestApplication } from '@nestjs/common';
 import { Paginated } from 'nestjs-paginate';
 import request from 'supertest';
@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { GetProfileResponseDto } from './dtos/get-profile-response.dto';
 import { CreateUserRequestDto } from '../users/dtos/create-user-request.dto';
+import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
 
 describe('ProfilesController', () => {
   let app: INestApplication<App>;
@@ -25,6 +26,10 @@ describe('ProfilesController', () => {
   afterAll(async () => {
     await pgContainer.stop();
   }, ms('30s'));
+
+  beforeEach(async () => {
+    await truncateAllDataSources(app);
+  });
 
   it('get my own profile', async () => {
     const user = {

@@ -1,9 +1,10 @@
 import { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import ms from 'ms';
 import { UsersService } from 'src/features/users/users.service';
-import setupControllerEnv from 'test/setup-controller-env';
+import setupControllerEnv from 'test/utils/setup-controller-env';
 import { INestApplication } from '@nestjs/common';
 import { App } from 'supertest/types';
+import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -18,6 +19,10 @@ describe('UsersService', () => {
   afterAll(async () => {
     await pgContainer.stop();
   }, ms('30s'));
+
+  beforeEach(async () => {
+    await truncateAllDataSources(app);
+  });
 
   it('should be defined', () => {
     expect(usersService).toBeDefined();

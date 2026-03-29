@@ -16,5 +16,6 @@ const User: (
   },
 );
 
-export const Login = (...pipes: (PipeTransform | Type<PipeTransform>)[]) =>
-  User('login', ...pipes);
+export const CurrentUserLogin = (
+  ...pipes: (PipeTransform | Type<PipeTransform>)[]
+) => User('login', ...pipes);

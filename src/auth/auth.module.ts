@@ -3,7 +3,7 @@ import { ConfigsModule } from 'src/configs/configs.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/features/users/users.module';
-import { HashModule } from './hash/hash.module';
+import { HashModule } from 'src/common/hash/hash.module';
 import { AccessJwtModule } from './jwt/access-jwt.module';
 import { RefreshJwtModule } from './jwt/refresh-jwt.module';
 import { JwtStrategy } from './jwt.strategy';

@@ -6,7 +6,8 @@ import ms from 'ms';
 import { UsersService } from './users.service';
 import { CreateUserResponseDto } from './dtos/create-user-response.dto';
 import { SignInResponseDto } from 'src/auth/dtos/sign-in-response.dto';
-import setupControllerEnv from 'test/setup-controller-env';
+import setupControllerEnv from 'test/utils/setup-controller-env';
+import { truncateAllDataSources } from 'test/utils/truncate-all-data-sources';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication<App>;
@@ -21,6 +22,10 @@ describe('UsersController (e2e)', () => {
   afterAll(async () => {
     await pgContainer.stop();
   }, ms('30s'));
+
+  beforeEach(async () => {
+    await truncateAllDataSources(app);
+  });
 
   it('create new user successfully', async () => {
     const user = await request(app.getHttpServer())

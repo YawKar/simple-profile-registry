@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/features/users/users.service';
-import { HashService } from './hash/hash.service';
+import { HashService } from 'src/common/hash/hash.service';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from './dtos/access-token-payload';
 import { ACCESS_JWT_SERVICE } from './jwt/access-jwt.module';
@@ -70,5 +70,19 @@ export class AuthService {
       access_token: await this.accessJwtService.signAsync(accessPayload),
       refresh_token: await this.refreshJwtService.signAsync(refreshPayload),
     };
+  }
+
+  async logout(login: string, givenRefreshTokenId: any): Promise<void> {
+    if (typeof givenRefreshTokenId !== 'string') {
+      throw new UnauthorizedException();
+    }
+    const isMatch = await this.usersService.doRefreshTokensMatch(
+      login,
+      givenRefreshTokenId,
+    );
+    if (!isMatch) {
+      throw new UnauthorizedException();
+    }
+    await this.usersService.invalidateRefreshToken(login);
   }
 }
