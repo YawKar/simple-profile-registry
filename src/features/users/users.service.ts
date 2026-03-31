@@ -46,12 +46,9 @@ export class UsersService {
     login: string,
     selectFields?: FindOptionsSelect<UserEntity>,
   ) {
-    if (selectFields === undefined) {
-      return await this.usersRepository.findOneBy({ login });
-    }
     return await this.usersRepository.findOne({
       where: { login },
-      select: { login: true, ...selectFields },
+      select: selectFields && { login: true, ...selectFields },
     });
   }
 
