@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { ConfigsModule } from './configs/configs.module';
+import { FeaturesModule } from './features/features.module';
+import { ProvidersModule } from './providers/providers.module';
+import { CommonModule } from './common/common.module';
+import { ThrottlersModule } from './common/throttlers.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    AuthModule,
+    CommonModule,
+    ConfigsModule,
+    FeaturesModule,
+    ProvidersModule,
+    ThrottlersModule,
+  ],
 })
 export class AppModule {}

@@ -1,0 +1,34 @@
+---
+server:
+  port: 3000
+  throttle:
+    auth:
+      ttl: 60s
+      limit: 100
+    users:
+      ttl: 60s
+      limit: 100
+    profiles:
+      ttl: 10s
+      limit: 100
+
+auth:
+  jwt:
+    access:
+      secret: some_kind_of_secret_for_tokens
+      expirationDuration: 60m
+    refresh:
+      secret: refresh_secret
+      expirationDuration: 1w
+
+hash:
+  memoryCost: 4096
+  timeCost: 3
+  parallelism: 1
+
+database:
+  host: $TEST_DB_HOST
+  port: $TEST_DB_PORT
+  dbName: main
+  username: root
+  password: dummy_password_for_local_development
