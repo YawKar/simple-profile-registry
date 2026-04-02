@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { PostgresqlModule } from 'src/providers/databases/postgresql/postgresql.module';
 import { HashModule } from 'src/common/hash/hash.module';
+import { UsersRepository } from './users.repository';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { HashModule } from 'src/common/hash/hash.module';
     TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UsersRepository],
   exports: [UsersService],
 })
 export class UsersModule {}
